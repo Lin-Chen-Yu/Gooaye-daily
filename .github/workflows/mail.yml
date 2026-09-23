@@ -1,0 +1,63 @@
+name: Gooaye Mail
+
+on:
+  push:
+    paths:
+      - 'out/**/mail.html'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '只寄指定日期（留空 = 掃描全部未寄的）'
+        required: false
+        default: ''
+      force:
+        description: '忽略 mail.sent 強制重寄'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gooaye-mail
+  cancel-in-progress: false
+
+jobs:
+  mail:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Send pending mail
+        env:
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MAIL_TO:            ${{ secrets.MAIL_TO }}
+          # 用環境變數傳，不要把 ${{ }} 直接展開進 shell 指令列：
+          # push 觸發時 inputs 是空的，會留下空的續行反斜線。
+          IN_DATE:  ${{ github.event.inputs.date }}
+          IN_FORCE: ${{ github.event.inputs.force }}
+        run: |
+          ARGS=""
+          [ -n "$IN_DATE" ] && ARGS="$ARGS $IN_DATE"
+          [ "$IN_FORCE" = "true" ] && ARGS="$ARGS --force"
+          echo "send_mail.py$ARGS"
+          python send_mail.py $ARGS
+
+      # mail.sent 必須推回 repo，否則下次觸發會重寄。
+      - name: Commit mail.sent
+        if: always()
+        run: |
+          git config user.name  "gooaye-bot"
+          git config user.email "gooaye-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "沒有變更"
+          else
+            git commit -m "mail sent $(TZ=Asia/Taipei date +%Y-%m-%d\ %H:%M) 台北"
+            git push
+          fi

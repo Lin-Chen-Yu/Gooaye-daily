@@ -1,0 +1,67 @@
+name: Gooaye Fetch
+
+on:
+  schedule:
+    # 03:30 UTC = 11:30 Asia/Taipei。GitHub 的 cron 在尖峰時段可能延遲數分鐘到數十分鐘，
+    # 所以下游的 Claude 排程設在 13:00 台北，留 90 分鐘緩衝。
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+    inputs:
+      hours:
+        description: '往回抓幾小時（補抓時可填 130）'
+        required: false
+        default: '26'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gooaye-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Fetch channel
+        env:
+          TG_API_ID:   ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_SESSION:  ${{ secrets.TG_SESSION }}
+        run: python fetch.py ${{ github.event.inputs.hours || '26' }}
+
+      # 即使抓取失敗也要 commit，因為 status.json 裡的 FAIL 是下游唯一的失敗訊號。
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name  "gooaye-bot"
+          git config user.email "gooaye-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "沒有變更，略過 commit"
+          else
+            git commit -m "fetch $(TZ=Asia/Taipei date +%Y-%m-%d\ %H:%M) 台北"
+            git push
+          fi
+
+      # 最後才讓 job 變紅，這樣 GitHub 會寄失敗通知信給你，而 status.json 也已經推上去了。
+      - name: Fail job if fetch failed
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, sys
+          s = json.load(open('status.json', encoding='utf-8'))
+          print(f"status={s['status']} date={s['date']} count={s['count']}")
+          if s['status'] != 'OK':
+              print(f"error: {s['error']}")
+              sys.exit(1)
+          PY
