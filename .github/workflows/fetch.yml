@@ -2,9 +2,14 @@ name: Gooaye Fetch
 
 on:
   schedule:
-    # 03:30 UTC = 11:30 Asia/Taipei。GitHub 的 cron 在尖峰時段可能延遲數分鐘到數十分鐘，
+    # GitHub 的 cron 在尖峰時段可能延遲數分鐘到數十分鐘，
     # 所以下游的 Claude 排程設在 13:00 台北，留 90 分鐘緩衝。
-    - cron: '30 3 * * *'
+    # GitHub 可能直接丟掉排程（2026-09-24 就整個沒觸發），整點/半點尤其容易。
+    # 所以用三個錯開的非整點時段互為備援；guard 步驟保證同一天成功後其餘跳過。
+    # 03:07 / 03:47 / 04:23 UTC = 11:07 / 11:47 / 12:23 台北
+    - cron: '7 3 * * *'
+    - cron: '47 3 * * *'
+    - cron: '23 4 * * *'
   workflow_dispatch:
     inputs:
       hours:
@@ -25,14 +30,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 排程觸發時，若今天已經 OK 就跳過（手動觸發一律執行）
+      - name: Guard (skip if today already OK)
+        id: guard
+        run: |
+          TODAY=$(TZ=Asia/Taipei date +%F)
+          SKIP=$(python3 -c "import json;s=json.load(open('status.json'));print('true' if s.get('status')=='OK' and s.get('date')=='$TODAY' else 'false')" 2>/dev/null || echo false)
+          [ "${{ github.event_name }}" != "schedule" ] && SKIP=false
+          echo "skip=$SKIP" | tee -a "$GITHUB_OUTPUT"
+
       - uses: actions/setup-python@v5
+        if: steps.guard.outputs.skip != 'true'
         with:
           python-version: '3.12'
           cache: pip
 
       - run: pip install -r requirements.txt
+        if: steps.guard.outputs.skip != 'true'
 
       - name: Fetch channel
+        if: steps.guard.outputs.skip != 'true'
         env:
           TG_API_ID:   ${{ secrets.TG_API_ID }}
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
@@ -41,7 +58,7 @@ jobs:
 
       # 即使抓取失敗也要 commit，因為 status.json 裡的 FAIL 是下游唯一的失敗訊號。
       - name: Commit results
-        if: always()
+        if: always() && steps.guard.outputs.skip != 'true'
         run: |
           git config user.name  "gooaye-bot"
           git config user.email "gooaye-bot@users.noreply.github.com"
@@ -55,7 +72,7 @@ jobs:
 
       # 最後才讓 job 變紅，這樣 GitHub 會寄失敗通知信給你，而 status.json 也已經推上去了。
       - name: Fail job if fetch failed
-        if: always()
+        if: always() && steps.guard.outputs.skip != 'true'
         run: |
           python - <<'PY'
           import json, sys
