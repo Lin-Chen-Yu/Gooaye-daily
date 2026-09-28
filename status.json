@@ -1,11 +1,30 @@
 {
   "status": "OK",
-  "date": "2026-09-27",
+  "date": "2026-09-28",
   "hours": 26,
-  "count": 0,
-  "dir": "out/2026-09-27",
-  "generated_at_taipei": "2026-09-27 17:10:39",
-  "generated_at_utc": "2026-09-27 09:10:39",
-  "posts": [],
+  "count": 3,
+  "dir": "out/2026-09-28",
+  "generated_at_taipei": "2026-09-28 17:40:00",
+  "generated_at_utc": "2026-09-28 09:40:00",
+  "posts": [
+    {
+      "id": 6446,
+      "tpe": "2026-09-28 07:52 台北",
+      "has_text": true,
+      "media": "其他媒體: MessageMediaWebPage"
+    },
+    {
+      "id": 6447,
+      "tpe": "2026-09-28 07:52 台北",
+      "has_text": false,
+      "media": "圖片: media/6447.jpg"
+    },
+    {
+      "id": 6448,
+      "tpe": "2026-09-28 07:54 台北",
+      "has_text": true,
+      "media": "其他媒體: MessageMediaWebPage"
+    }
+  ],
   "error": null
 }
