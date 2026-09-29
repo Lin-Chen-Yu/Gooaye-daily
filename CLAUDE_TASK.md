@@ -7,8 +7,8 @@
 - CLONE_URL：`https://x-access-token:<<GITHUB_PAT>>@github.com/<<GITHUB_USER>>/<<REPO>>.git`
 
 ## 架構（先讀懂再動手）
-抓取由 GitHub Actions 的 `Gooaye Fetch` 執行（cron 11:07~13:41 台北多個備援時段，但 cron 常延遲數小時甚至被丟掉，所以你要在步驟一主動推 `trigger/fetch.txt` 觸發），把 `posts.md`、
-圖片與 `status.json` commit 進 repo。你在 13:00 跑，只負責讀結果、查證、講解、
+抓取由 GitHub Actions 的 `Gooaye Fetch` 執行（cron 06:53 / 07:17 / 07:47 台北備援，但 cron 常延遲數小時甚至被丟掉，所以你要在步驟一主動推 `trigger/fetch.txt` 觸發），把 `posts.md`、
+圖片與 `status.json` commit 進 repo。你在 07:15 跑，只負責讀結果、查證、講解、
 把 `mail.html` 寫回 repo。寄信由另一個 Actions workflow `Gooaye Mail` 在偵測到
 `mail.html` 被推上來時自動用 Gmail SMTP 寄出（圖片內嵌）。
 
