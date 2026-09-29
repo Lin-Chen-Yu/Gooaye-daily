@@ -7,7 +7,7 @@
 - CLONE_URL：`https://x-access-token:<<GITHUB_PAT>>@github.com/<<GITHUB_USER>>/<<REPO>>.git`
 
 ## 架構（先讀懂再動手）
-抓取由 GitHub Actions 的 `Gooaye Fetch` 每天 11:30 台北自動執行，把 `posts.md`、
+抓取由 GitHub Actions 的 `Gooaye Fetch` 執行（cron 11:07~13:41 台北多個備援時段，但 cron 常延遲數小時甚至被丟掉，所以你要在步驟一主動推 `trigger/fetch.txt` 觸發），把 `posts.md`、
 圖片與 `status.json` commit 進 repo。你在 13:00 跑，只負責讀結果、查證、講解、
 把 `mail.html` 寫回 repo。寄信由另一個 Actions workflow `Gooaye Mail` 在偵測到
 `mail.html` 被推上來時自動用 Gmail SMTP 寄出（圖片內嵌）。
@@ -27,6 +27,19 @@ rm -rf gooaye && git clone --depth 1 "<CLONE_URL>" gooaye && ls gooaye
 ```
 
 clone 失敗（網路不通、PAT 過期）就跳到步驟五回報失敗。
+
+**主動觸發抓取（必做，不要等 cron）**：clone 後先看 `status.json` 的 `date` 與 `status`。
+若不是「今天且 OK」，就推一個觸發檔，Fetch workflow 會在幾秒內啟動：
+
+```bash
+cd gooaye
+git config user.name "claude-gooaye"; git config user.email "claude-gooaye@users.noreply.github.com"
+date '+%F %T' > trigger/fetch.txt
+git add trigger/fetch.txt && git commit -m "trigger fetch $(TZ=Asia/Taipei date +%F)" && git push
+```
+
+然後每 60 秒 `git pull` 一次看 `status.json`，最多等 10 分鐘（約 1 分鐘內通常就好）。
+10 分鐘內仍未更新才進入下面步驟二的 (A) 流程。若已是今天 OK 就不必推。
 
 接著用 **Read 工具**（檔案工具端的 outputs 路徑）開 `gooaye/status.json`。
 

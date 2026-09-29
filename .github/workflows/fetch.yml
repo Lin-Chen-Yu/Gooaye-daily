@@ -10,6 +10,7 @@ on:
     - cron: '7 3 * * *'
     - cron: '47 3 * * *'
     - cron: '23 4 * * *'
+    - cron: '41 5 * * *'   # 13:41 台北，最後保險
   # 主要觸發：Claude 排程在 13:00 推 trigger/fetch.txt，push 觸發幾秒內就會跑。
   # （2026-09-25~28 的 cron 全部延遲約 5.5 小時，不能再依賴 cron 準時。）
   push:
@@ -73,7 +74,14 @@ jobs:
             echo "沒有變更，略過 commit"
           else
             git commit -m "fetch $(TZ=Asia/Taipei date +%Y-%m-%d\ %H:%M) 台北"
-            git push
+            # 別的 workflow / Claude 可能同時推了 commit；被拒就 rebase 後重推
+            for i in 1 2 3 4 5; do
+              git push && break
+              echo "push 被拒（第 $i 次），rebase 後重試"
+              git pull --rebase -X theirs origin "${GITHUB_REF_NAME:-main}" || git rebase --abort
+              sleep $((i * 3))
+            done
+            git push || { echo "::error::push 失敗，status.json 沒送上去"; exit 1; }
           fi
 
       # 最後才讓 job 變紅，這樣 GitHub 會寄失敗通知信給你，而 status.json 也已經推上去了。

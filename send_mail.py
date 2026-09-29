@@ -15,7 +15,7 @@
       python send_mail.py 2026-09-22 只處理指定日期
       python send_mail.py 2026-09-22 --force  忽略 mail.sent 強制重寄
 """
-import os, sys, re, smtplib, mimetypes, traceback
+import os, sys, re, time, smtplib, mimetypes, traceback
 import datetime as dt
 from pathlib import Path
 from email.message import EmailMessage
@@ -72,14 +72,19 @@ def send_one(outdir: Path, user: str, pw: str, to: str, force: bool) -> bool:
         html_part.add_related(p.read_bytes(), maintype=maintype, subtype=subtype,
                               cid=f"<{cid}>", filename=p.name)
 
-    try:
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=60) as s:
-            s.ehlo(); s.starttls(); s.ehlo()
-            s.login(user, pw)
-            s.send_message(msg)
-    except Exception:
-        log(f"FAIL | {date} 寄信失敗\n{traceback.format_exc()}")
-        return False
+    for attempt in range(1, 4):
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587, timeout=60) as s:
+                s.ehlo(); s.starttls(); s.ehlo()
+                s.login(user, pw)
+                s.send_message(msg)
+            break
+        except Exception:
+            log(f"WARN | {date} 寄信失敗（第 {attempt}/3 次）\n{traceback.format_exc()}")
+            if attempt == 3:
+                log(f"FAIL | {date} 寄信放棄，等下一輪排程補寄")
+                return False
+            time.sleep(10 * attempt)
 
     sent_flag.write_text(dt.datetime.now(TPE).isoformat(), encoding="utf-8")
     log(f"OK | {date} 已寄出「{subject}」→ {to}，內嵌圖片 {len(inline)} 張")
