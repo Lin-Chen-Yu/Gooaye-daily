@@ -10,6 +10,12 @@ on:
     - cron: '7 3 * * *'
     - cron: '47 3 * * *'
     - cron: '23 4 * * *'
+  # 主要觸發：Claude 排程在 13:00 推 trigger/fetch.txt，push 觸發幾秒內就會跑。
+  # （2026-09-25~28 的 cron 全部延遲約 5.5 小時，不能再依賴 cron 準時。）
+  push:
+    branches: [main]
+    paths:
+      - 'trigger/fetch.txt'
   workflow_dispatch:
     inputs:
       hours:
@@ -30,13 +36,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 排程觸發時，若今天已經 OK 就跳過（手動觸發一律執行）
+      # 非手動觸發（schedule / push）時，若今天已經 OK 就跳過；手動觸發一律執行
       - name: Guard (skip if today already OK)
         id: guard
         run: |
           TODAY=$(TZ=Asia/Taipei date +%F)
           SKIP=$(python3 -c "import json;s=json.load(open('status.json'));print('true' if s.get('status')=='OK' and s.get('date')=='$TODAY' else 'false')" 2>/dev/null || echo false)
-          [ "${{ github.event_name }}" != "schedule" ] && SKIP=false
+          [ "${{ github.event_name }}" = "workflow_dispatch" ] && SKIP=false
           echo "skip=$SKIP" | tee -a "$GITHUB_OUTPUT"
 
       - uses: actions/setup-python@v5
