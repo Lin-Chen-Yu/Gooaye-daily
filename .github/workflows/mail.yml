@@ -1,6 +1,9 @@
 name: Gooaye Mail
 
 on:
+  # 補寄：SMTP 偶發失敗時 mail.sent 不會寫，下一輪排程會自動再試
+  schedule:
+    - cron: '17,47 5-8 * * *'   # 13:17~16:47 台北，每半小時（只寄尚未寄出的）
   push:
     paths:
       - 'out/**/mail.html'
@@ -59,5 +62,11 @@ jobs:
             echo "沒有變更"
           else
             git commit -m "mail sent $(TZ=Asia/Taipei date +%Y-%m-%d\ %H:%M) 台北"
-            git push
+            for i in 1 2 3 4 5; do
+              git push && break
+              echo "push 被拒（第 $i 次），rebase 後重試"
+              git pull --rebase -X theirs origin "${GITHUB_REF_NAME:-main}" || git rebase --abort
+              sleep $((i * 3))
+            done
+            git push || { echo "::error::mail.sent 推送失敗，可能重寄"; exit 1; }
           fi

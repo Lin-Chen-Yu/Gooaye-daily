@@ -6,7 +6,7 @@
 
 | 誰 | 什麼時候 | 做什麼 |
 |---|---|---|
-| GitHub Actions `Gooaye Fetch` | 每天 03:30 UTC（11:30 台北） | Telethon 抓過去 26 小時貼文與圖片 → commit `out/<日期>/` 與 `status.json` |
+| GitHub Actions `Gooaye Fetch` | cron 多個備援時段 + Claude 推 `trigger/fetch.txt` 觸發（主要） | Telethon 抓過去 26 小時貼文與圖片 → commit `out/<日期>/` 與 `status.json` |
 | Claude Cowork 雲端排程 | 每天 13:00 台北 | `git clone` 本 repo → 讀 `status.json` 與 `posts.md`、用 Read 看圖 → 查證講解 → 寫 `out/<日期>/mail.html` → push |
 | GitHub Actions `Gooaye Mail` | 偵測到 `mail.html` 被 push | Gmail SMTP 寄出，圖片以 inline cid 穿插 → commit `mail.sent` |
 
