@@ -18,10 +18,16 @@ try:
                        int(os.environ["TG_API_ID"]), os.environ["TG_API_HASH"])
     c.connect()
     me = c.get_me() if c.is_user_authorized() else None
-    n = len(c.get_messages("Gooaye", limit=3)) if me else 0
+    cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=26)
+    n = 0
+    if me:
+        for m in c.iter_messages("Gooaye", limit=200):
+            if m.date < cutoff:
+                break
+            n += 1
     c.disconnect()
     tg = "OK" if me else "FAIL（session 失效）"
-    lines.append(f"Telegram：{tg}，讀到最新 {n} 則")
+    lines.append(f"Telegram：{tg}，過去 26 小時共 {n} 則")
 except Exception as e:
     tg = "FAIL"
     lines.append(f"Telegram：FAIL {type(e).__name__}: {e}")
