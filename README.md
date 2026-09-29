@@ -7,10 +7,10 @@
 | 誰 | 什麼時候 | 做什麼 |
 |---|---|---|
 | GitHub Actions `Gooaye Fetch` | cron 多個備援時段 + Claude 推 `trigger/fetch.txt` 觸發（主要） | Telethon 抓過去 26 小時貼文與圖片 → commit `out/<日期>/` 與 `status.json` |
-| Claude Cowork 雲端排程 | 每天 13:00 台北 | `git clone` 本 repo → 讀 `status.json` 與 `posts.md`、用 Read 看圖 → 查證講解 → 寫 `out/<日期>/mail.html` → push |
+| Claude Cowork 雲端排程 | 每天 07:15 台北 | `git clone` 本 repo → 讀 `status.json` 與 `posts.md`、用 Read 看圖 → 查證講解 → 寫 `out/<日期>/mail.html` → push |
 | GitHub Actions `Gooaye Mail` | 偵測到 `mail.html` 被 push | Gmail SMTP 寄出，圖片以 inline cid 穿插 → commit `mail.sent` |
 
-中間留 90 分鐘緩衝，因為 GitHub 的 cron 在尖峰時段會延遲數分鐘到數十分鐘。
+抓取在 07:00 台北前後；GitHub 的 cron 會延遲甚至被丟掉，所以另有 06:55 的觸發排程主動推 `trigger/fetch.txt`。寄信失敗有三層保險：SMTP 587/465 輪流重試 → 每半小時補寄 → 開 GitHub Issue（附完整講解）由 GitHub 通知你。
 
 ### 為什麼是這個分工
 
@@ -58,7 +58,7 @@ GitHub Settings > Developer settings > Personal access tokens > Fine-grained tok
 
 ### 5. 設定 Claude 雲端排程
 
-把 `CLAUDE_TASK.md` 的內容貼成一個新的 Cowork 排程任務，每天 13:00 台北執行，並把開頭三個角括號換成你的 repo 與 PAT。
+把 `CLAUDE_TASK.md` 的內容貼成一個新的 Cowork 排程任務，每天 07:15 台北執行，並把開頭三個角括號換成你的 repo 與 PAT。
 
 > 這個排程**不能**引用任何本機路徑。Cowork 排程預設跑在雲端，但只要任務需要本機檔案或 App，就會退回只在本機跑 —— 那就失去搬上雲的意義了。
 

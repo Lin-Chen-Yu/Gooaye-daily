@@ -72,19 +72,25 @@ def send_one(outdir: Path, user: str, pw: str, to: str, force: bool) -> bool:
         html_part.add_related(p.read_bytes(), maintype=maintype, subtype=subtype,
                               cid=f"<{cid}>", filename=p.name)
 
-    for attempt in range(1, 4):
+    # 587(STARTTLS) 與 465(SSL) 輪流試：某個 port 被擋或閃斷時另一個常常還通
+    for attempt in range(1, 5):
         try:
-            with smtplib.SMTP("smtp.gmail.com", 587, timeout=60) as s:
-                s.ehlo(); s.starttls(); s.ehlo()
-                s.login(user, pw)
-                s.send_message(msg)
+            if attempt % 2 == 1:
+                with smtplib.SMTP("smtp.gmail.com", 587, timeout=60) as s:
+                    s.ehlo(); s.starttls(); s.ehlo()
+                    s.login(user, pw)
+                    s.send_message(msg)
+            else:
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=60) as s:
+                    s.login(user, pw)
+                    s.send_message(msg)
             break
         except Exception:
-            log(f"WARN | {date} 寄信失敗（第 {attempt}/3 次）\n{traceback.format_exc()}")
-            if attempt == 3:
-                log(f"FAIL | {date} 寄信放棄，等下一輪排程補寄")
+            log(f"WARN | {date} 寄信失敗（第 {attempt}/4 次）\n{traceback.format_exc()}")
+            if attempt == 4:
+                log(f"FAIL | {date} 寄信放棄，等下一輪補寄排程；仍失敗會開 GitHub Issue")
                 return False
-            time.sleep(10 * attempt)
+            time.sleep(15 * attempt)
 
     sent_flag.write_text(dt.datetime.now(TPE).isoformat(), encoding="utf-8")
     log(f"OK | {date} 已寄出「{subject}」→ {to}，內嵌圖片 {len(inline)} 張")
