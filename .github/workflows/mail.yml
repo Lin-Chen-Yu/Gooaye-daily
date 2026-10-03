@@ -3,9 +3,9 @@ name: Gooaye Mail
 on:
   # 補寄：SMTP 偶發失敗時 mail.sent 不會寫，下一輪排程會自動再試
   schedule:
-    # 保險 1：SMTP 失敗時 mail.sent 不會寫，之後每半小時自動補寄（只寄尚未寄出的）
-    # 23:07~02:37 UTC = 07:07~10:37 台北
-    - cron: '7,37 23,0,1,2 * * *'
+    # 每半小時到 Gmail 收 Claude 的講解原稿並寄出；SMTP 失敗時下一輪自動補寄
+    # 03:37~05:07 UTC = 11:37~13:07 台北
+    - cron: '7,37 3,4,5 * * *'
   push:
     paths:
       - 'out/**/mail.html'
@@ -38,6 +38,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Fetch Claude draft from Gmail
+        env:
+          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python relay_fetch.py
 
       - name: Send pending mail
         env:
