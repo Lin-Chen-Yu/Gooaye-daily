@@ -1,0 +1,51 @@
+--- /tmp/g2/.github/workflows/mail.yml	2026-10-06 06:18:30.571603218 +0000
++++ .github/workflows/mail.yml	2026-10-06 07:55:03.768403669 +0000
+@@ -1,6 +1,10 @@
+ name: Gooaye Mail
+ 
+ on:
++  # 主要觸發：Gooaye Fetch 跑完就啟動，接著在 job 內等 Claude 原稿（最晚等到 14:30 台北）
++  workflow_run:
++    workflows: ['Gooaye Fetch']
++    types: [completed]
+   # 補寄：SMTP 偶發失敗時 mail.sent 不會寫，下一輪排程會自動再試
+   schedule:
+     # 每半小時到 Gmail 收 Claude 的講解原稿並寄出；SMTP 失敗時下一輪自動補寄
+@@ -30,8 +34,9 @@
+ 
+ jobs:
+   mail:
++    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+     runs-on: ubuntu-latest
+-    timeout-minutes: 20
++    timeout-minutes: 480
+     steps:
+       - uses: actions/checkout@v4
+ 
+@@ -39,13 +44,26 @@
+         with:
+           python-version: '3.12'
+ 
++      # 只有 workflow_run 觸發時才等；schedule / push / 手動 照舊直接跑
++      - name: Wait for Claude draft
++        id: wait
++        if: github.event_name == 'workflow_run'
++        env:
++          GMAIL_USER:         ${{ secrets.GMAIL_USER }}
++          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
++        run: |
++          git pull -q --ff-only origin "${GITHUB_REF_NAME:-main}" || true   # 拿到最新的 mail.sent / status.json
++          python relay_wait.py
++
+       - name: Fetch Claude draft from Gmail
++        if: steps.wait.outputs.ready != 'false'
+         env:
+           GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+         run: python relay_fetch.py
+ 
+       - name: Send pending mail
++        if: steps.wait.outputs.ready != 'false'
+         env:
+           GMAIL_USER:         ${{ secrets.GMAIL_USER }}
+           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
