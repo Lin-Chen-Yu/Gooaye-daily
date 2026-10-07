@@ -1,0 +1,31 @@
+[
+  {
+    "id": 6465,
+    "utc": "2026-10-06 01:40 UTC",
+    "tpe": "2026-10-06 09:40 台北",
+    "text": "alab@2026citi conference\n\n對 Asteralabs 而言，最大的槓桿事件是 amd helios 後續世代與 AWS 原生 ual 交換器落地。公司的結論是卡好交換器，不管裡面銅還光，都可以由自己去分配\n\n- 算力需求遠超供給，客戶只能從既有硬體榨出更多產出，呼應 Scorpio X 同顆 GPU 產出更多 tokens/sec 的訴求\n\n- Hopper 世代只掛 Aries retimer (<$100 USD)，到現在 Aries+Taurus+LEO CXL+Scorpio 合計接近 $1000 USD。下一步目標是加上光學後達數千美元/XPU\n\n- Q3 Scorpio 將成為公司營收最大的產品線，X 系列反超 P 系列，公司稱 Scorpio P 是目前 pcie gen 6 出貨量最大的交換器\n\n- CEO 表示不幫 AMD 發言，轉述 AMD 公開說法：MI450 系列採用 UALink over Ethernet，原因是 UALink 交換器尚未可用\n\n- 光學布局分三階段，2027 p1 透過收購 aixscale 取得的玻璃耦合器技術去拿 cpu scale out。2028 p2 主打 200G NPO。第三階段透過自製完整光引擎來獲取最大收益\n\n- 跨櫃 scale-up 方向上，櫃內留銅、跨櫃走光，lane 單價隨 radix 上升\n\n- cluster 從 72 顆擴大到 144/288/576 顆 GPU 時，物理限制使銅不可行，轉入光學（先 NPO）\n\n- 卡好交換器平台就握有系統其餘部分的影響力，銅或光的訊號調理生意都是自己的，分配問題而已",
+    "media": "",
+    "links": [],
+    "url": "https://t.me/Gooaye/6465"
+  },
+  {
+    "id": 6466,
+    "utc": "2026-10-06 01:41 UTC",
+    "tpe": "2026-10-06 09:41 台北",
+    "text": "",
+    "media": "圖片: media/6466.jpg",
+    "links": [],
+    "url": "https://t.me/Gooaye/6466"
+  },
+  {
+    "id": 6467,
+    "utc": "2026-10-07 00:49 UTC",
+    "tpe": "2026-10-07 08:49 台北",
+    "text": "https://fab24hr.com/",
+    "media": "其他媒體: MessageMediaWebPage",
+    "links": [
+      "https://fab24hr.com/"
+    ],
+    "url": "https://t.me/Gooaye/6467"
+  }
+]
