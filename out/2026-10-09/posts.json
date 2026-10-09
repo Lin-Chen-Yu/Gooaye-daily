@@ -1,0 +1,20 @@
+[
+  {
+    "id": 6470,
+    "utc": "2026-10-08 04:15 UTC",
+    "tpe": "2026-10-08 12:15 台北",
+    "text": "marvell investor day\n\n重申自己是 connectivity 大玩家，包山包海連 bmc 都想下去做，第一直覺是這市場這麼小意義在哪，進一步思考是會不會這市場後面會變很大他才聞香而來\n\n- asic 已給全部美系 CSP，前十大雲占 2025 capex 60% \n\n- scale across、scale out、scale up、scale in 全吃，櫃內 scale up 100% 走銅\n\n- 推理占資料中心 60%，rack 內記憶體不夠用所以用光連結整個資料中心\n\n- scale up 占流量 85%，scale out 15%，互聯省電是關鍵，省越多 token gen 越多\n\n- 公司認為 NPO 與 CPO 是並行\n\n- scale up optics 在明年會從幾乎為零的營收往數億 USD 跑\n\n- 800G 是 AI 主力，1.6T 正在高速 ramp，稱自己是首家 n3 1.6T DSP 量產者，DSP 已是數十億美元業務，1.6T 需要多顆 DSP 並行最佳化\n\n- 3.2T 存在物理限制，400G/lane PAM4 距離上限約 500m-1km，但大型部署需要 2 km，所以 marvell 推 Coherent-lite 補中間地帶\n\n- 認為每代提升都是有量有價\n\n- 3.2T 需要新材料，1.6T 用 TFLN，3.2T 開始投資電漿子\n\n- AI 伺服器超過 1500 個感測器，需要比傳統 BMC 高 1000 倍的效能，以 OCTEON 為基礎做半客製，已有多家雲端業者專案\n\n- Scale out 以 Teralynx 為主，51.2T 進入第一個完整量產年，今年翻倍、明年再翻倍以上\n\n- Teralynx T100 宣稱業界唯一單晶片 reticle 極限 die 做到 102.4T，內含 512 顆 200G serdes\n\n- SerDes 100/200/400G 電與光皆已在矽上驗證，400G 產品明年量產",
+    "media": "",
+    "links": [],
+    "url": "https://t.me/Gooaye/6470"
+  },
+  {
+    "id": 6471,
+    "utc": "2026-10-08 04:15 UTC",
+    "tpe": "2026-10-08 12:15 台北",
+    "text": "",
+    "media": "圖片: media/6471.jpg",
+    "links": [],
+    "url": "https://t.me/Gooaye/6471"
+  }
+]
