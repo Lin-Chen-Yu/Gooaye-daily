@@ -1,53 +1,23 @@
 {
   "status": "OK",
-  "date": "2026-10-17",
+  "date": "2026-10-18",
   "hours": 26,
-  "count": 7,
-  "dir": "out/2026-10-17",
-  "generated_at_taipei": "2026-10-17 08:49:58",
-  "generated_at_utc": "2026-10-17 00:49:58",
+  "count": 2,
+  "dir": "out/2026-10-18",
+  "generated_at_taipei": "2026-10-18 08:27:48",
+  "generated_at_utc": "2026-10-18 00:27:48",
   "posts": [
     {
-      "id": 6485,
-      "tpe": "2026-10-16 08:56 台北",
+      "id": 6492,
+      "tpe": "2026-10-17 15:00 台北",
       "has_text": true,
       "media": ""
     },
     {
-      "id": 6486,
-      "tpe": "2026-10-16 08:56 台北",
+      "id": 6493,
+      "tpe": "2026-10-17 15:00 台北",
       "has_text": false,
-      "media": "圖片: media/6486.jpg"
-    },
-    {
-      "id": 6487,
-      "tpe": "2026-10-16 09:08 台北",
-      "has_text": true,
-      "media": "圖片: media/6487.jpg"
-    },
-    {
-      "id": 6488,
-      "tpe": "2026-10-16 09:12 台北",
-      "has_text": true,
-      "media": "圖片: media/6488.jpg"
-    },
-    {
-      "id": 6489,
-      "tpe": "2026-10-16 09:25 台北",
-      "has_text": false,
-      "media": "圖片: media/6489.jpg"
-    },
-    {
-      "id": 6490,
-      "tpe": "2026-10-16 09:27 台北",
-      "has_text": false,
-      "media": "圖片: media/6490.jpg"
-    },
-    {
-      "id": 6491,
-      "tpe": "2026-10-16 09:29 台北",
-      "has_text": false,
-      "media": "圖片: media/6491.jpg"
+      "media": "圖片: media/6493.jpg"
     }
   ],
   "error": null
