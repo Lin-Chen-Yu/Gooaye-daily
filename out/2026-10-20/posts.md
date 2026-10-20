@@ -1,0 +1,29 @@
+# Gooaye 股癌 — 過去 26 小時（共 2 則）
+
+
+## #6496　2026-10-19 15:05 台北（2026-10-19 07:05 UTC）
+https://t.me/Gooaye/6496
+
+emib-t 在 intel 封測段良率已經在九十幾，但載板段根據 keybanc，於 ibiden 是 50-60%，uni 是 20-30%
+
+---
+"機會的另一面是兩道硬約束。第一道在供應鏈：EMIB-T透過嵌入封裝基板的矽橋加矽穿孔實現垂直電力與訊號傳輸，但KeyBanc調查顯示，基板供應商Ibiden的EMIB-T基板良率平均約50%至60%，欣興僅約20%至30%。瑞銀則估計，到2028年英特爾EMIB-T可能支援超過200萬片基板以滿足聯發科需求。"
+
+"隨著外部客戶對英特爾EMIB（嵌入式多晶片互連橋）的興趣持續增長，基板良率正成為衡量其成熟度的關鍵指標。業內人士表示，EMIB基板良率在過去一個季度已提升至45%左右，供應鏈的目標是在2027年第一季達到60%。
+
+消息人士稱，良率的提升可以追溯到更早時期：2026年第二季良率約為30%，而目前已達到約45%。據報道，供應鏈的近期目標是在2026年第四季達到50%，高於2027年第一季60%的目標，其中日本供應商的營運狀況比其他供應商更為穩定。"
+
+https://m.eccn.com/consultation/design/2026101812432068.html
+https://www.trendforce.com/news/2026/09/23/breaking-intel-emib-substrate-yields-reportedly-hit-45-suppliers-eye-60-by-1q27/
+
+> 其他媒體: MessageMediaWebPage
+
+> 外部連結: https://m.eccn.com/consultation/design/2026101812432068.html
+
+
+## #6497　2026-10-19 15:05 台北（2026-10-19 07:05 UTC）
+https://t.me/Gooaye/6497
+
+_（無文字）_
+
+> 圖片: media/6497.jpg
