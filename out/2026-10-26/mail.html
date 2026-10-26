@@ -1,0 +1,29 @@
+<h2>股癌 2026-10-26 貼文講解</h2>
+<p>過去 26 小時只有 1 則貼文（#6507），是一張沒有附文字的 a16z 圖表，主題是 OpenRouter 上每週 AI token 用量，以及開源權重模型的占比。因為貼文本身沒有文字，下面的講解只根據圖上的資訊，主講沒有寫出來的觀點不做推測。</p>
+
+<h3>#6507　2026-10-25 09:23 台北</h3>
+<blockquote><p>（無文字，僅一張圖片）</p></blockquote>
+<p><img src="media/6507.jpg" style="max-width:100%;height:auto;"></p>
+<p>圖片是 a16z 的圖表，標題「Token Demand So Back (For Open And Closed)」，副標「Weekly tokens on OpenRouter」，資料截至 2026/10/18。長條圖是每週 token 數（兆），分成 Open-Weight（深藍）與 Closed-Weight（淺藍）；實線是開源模型的 token 占比，虛線是開源模型的花費占比。最新幾週總量約 160–165 兆，其中開源約 120 兆；開源 token 占比約 72%，花費占比卻只有約 25%。</p>
+
+<h3>講解</h3>
+<p><b>OpenRouter 是什麼：</b>它是一個 API 聚合平台，開發者用同一組介面就能呼叫 OpenAI、Anthropic、Google，以及 DeepSeek、Qwen 等開源模型，按 token 計費。它的流量可以當成觀察「開發者實際在用什麼模型」的窗口，但只是整個市場的一部分：大企業多半直接向原廠或雲端（Azure、Bedrock、Vertex）採購，這些用量看不到，所以不能直接等同全市場。</p>
+<p><b>圖上的三個重點：</b></p>
+<ul>
+<li><b>總量爆發：</b>2025 年 11 月每週大約只有個位數兆 token，2026 年 6 月以後明顯加速，10 月中來到 160 兆以上，一年內放大了二十倍以上。這呼應「推論需求起飛」的敘事，一般認為代理（agent）型應用一次任務就會消耗大量 token，是主要的推手。</li>
+<li><b>開源吃掉大部分量：</b>開源 token 占比從 2025 年底約 25–30% 一路爬到 70–75%。開源模型單價便宜很多，適合大量、重複、對頂尖能力要求不高的工作。</li>
+<li><b>量和錢是兩回事：</b>花費占比只從約 15% 升到約 25–30%，最近還略為回落。也就是說，開源拿走約七成的量，卻只拿到約四分之一的錢，閉源前沿模型仍然賺走大部分營收。產業媒體也有類似的觀察：開源（多為中國模型）贏的是 token 量，不是金額。</li>
+</ul>
+<p><b>投資上的意涵（屬一般性解讀，非主講觀點）：</b>不論開源或閉源，token 總量都在暴增，背後的 GPU、記憶體、網通與電力的推論算力需求是共同受惠的一端；但模型端的定價壓力很大，「量大」不等於「賺錢」。看到這類圖時，要分清楚這是 token 數還是營收，也要注意 OpenRouter 的樣本偏向成本敏感的開發者，開源占比可能高於整體市場。</p>
+<p><b>查證限制：</b>這次沒有找到 a16z 這張圖的原文，數字是直接從圖上讀出來的估計值；一年內放大二十倍以上，是用圖上起點與終點的長條高度約略換算的。</p>
+
+<h3>貼文清單</h3>
+<ul><li>#6507　2026-10-25 09:23 台北：a16z「Token Demand So Back」圖表（無文字），<a href="https://t.me/Gooaye/6507">https://t.me/Gooaye/6507</a></li></ul>
+
+<h3>來源</h3>
+<ul>
+<li>圖表本身：a16z，Source: OpenRouter as of 10.18.26</li>
+<li><a href="https://levelup.gitconnected.com/chinese-open-weight-won-token-volume-not-dollars-token-share-in-2026-20cd0fc073e5">Chinese open-weight won token volume, not dollars (Level Up Coding)</a></li>
+<li><a href="https://fourweekmba.com/ai-agents-burn-nearly-5x-the-tokens-people-do-on-openrouter/">Agents Burn Nearly 5x the Tokens People Do on OpenRouter (FourWeekMBA)</a></li>
+<li><a href="https://openrouter.ai/data/newsletter/the-token-state-of-play">OpenRouter：The Token State of Play</a></li>
+</ul>
